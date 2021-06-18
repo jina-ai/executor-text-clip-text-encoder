@@ -1,12 +1,12 @@
 manifest_version: 1
-name: ImageNormalizer
-kind: crafter
+name: ClipTextEncoder
+kind: encoder
 type: pod
-description: '`ImageNormalizer` resizes and normalizes images'
+description: '`ClipTextEncoder` encodes text with CLIP model'
 author: Jina AI Dev-Team (dev-team@jina.ai)
 url: https://jina.ai
 vendor: Jina AI Limited
 documentation: https://github.com/jina-ai/jina-hub
 version: 0.0.1
 license: apache-2.0
-keywords: [image, normalization, reader, resize]
+keywords: [text, nlp, crossmodal, PyTorch, encoder, Clip, en]

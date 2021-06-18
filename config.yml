@@ -1,6 +1,6 @@
-jtype: ImageNormalizer
+jtype: ClipTextEncoder
 with:
   {}
 metas:
   py_modules:
-    - jinahub.image.normalizer
+    - jinahub.encoder.ClipTextEncoder
