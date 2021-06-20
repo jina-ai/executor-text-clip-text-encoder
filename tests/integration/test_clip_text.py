@@ -19,7 +19,7 @@ def test_fail():
             pass
 
     with Flow().add(uses=MockExecutor) as f:
-        f.post(on='/test', inputs=[Document(text=np.ones((10,), dtype=np.uint8))])
+        f.post(on='/test', inputs=[Document(text='whatever')])
 
 
 def test_clip_text_encoder():
