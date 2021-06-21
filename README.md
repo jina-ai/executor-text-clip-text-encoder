@@ -115,7 +115,7 @@ def check_emb(resp):
 with f:
 	f.post(
 	    on='/foo', 
-	    inputs=Document(np.random.randint((0, 256, (128, 64, 3)), dtype=np.uint8)), 
+	    inputs=Document(text='your text'), 
 	    on_done=check_emb)
 	    
 ```
@@ -123,11 +123,11 @@ with f:
 
 ### Inputs 
 
-[Documents](https://github.com/jina-ai/jina/blob/master/.github/2.0/cookbooks/Document.md) with `blob` of the shape `Height x Width x 3`. By default, the input `blob` must be an `ndarray` with `dtype=uint8`. The `Height` and `Width` can have arbitrary values. When setting `use_default_preprocessing=False`, the input `blob` must have the size of `224x224x3` with `dtype=float32`.
+[Documents](https://github.com/jina-ai/jina/blob/master/.github/2.0/cookbooks/Document.md) with text
 
 ### Returns
 
-[Documents](https://github.com/jina-ai/jina/blob/master/.github/2.0/cookbooks/Document.md) with `embedding` fields filled with an `ndarray` of the shape `512` with `dtype=nfloat32`.
+[Documents](https://github.com/jina-ai/jina/blob/master/.github/2.0/cookbooks/Document.md) with `embedding` fields filled with an `ndarray` of the shape `512` with `dtype=float32`.
 
 
 
