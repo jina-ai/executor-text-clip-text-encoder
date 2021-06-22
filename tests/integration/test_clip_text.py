@@ -28,9 +28,6 @@ def test_fail():
 
 
 def test_clip_text_encoder():
-    def validate_callback(resp):
-        assert 30 == len(resp.docs.get_attributes('embedding'))
-
     f = Flow().add(uses={
         'jtype': ClipTextEncoder.__name__,
         'with': {
@@ -39,37 +36,22 @@ def test_clip_text_encoder():
         }
     })
     with f:
-        f.post(on='/test', inputs=(Document(text='random text') for _ in range(30)),
-               on_done=validate_callback)
+        result = f.post(on='/test', inputs=(Document(text='random text') for _ in range(30)),
+               return_results=True)
+        assert 30 == len(result[0].docs.get_attributes('embedding'))
 
 
 def test_traversal_path():
-    def validate_default_traversal(resp):
-        for path, count in [['r', 0], ['c', 3], ['cc', 0]]:
-            assert len(DocumentArray(resp.data.docs).traverse_flat([path]).get_attributes('embedding')) == count
-
-    def validate_request_traversal(resp):
-        for path, count in [['r', 0], ['c', 0], ['cc', 2]]:
-            assert len(DocumentArray(resp.data.docs).traverse_flat([path]).get_attributes('embedding')) == count
-
     text = 'blah'
-    docs = [Document(
-        id='root1',
-        text=text,
-        chunks=[
-            Document(
-                id='chunk11',
-                text=text,
-                chunks=[
+    docs = [Document(id='root1', text=text)]
+    docs[0].chunks = [Document(id='chunk11', text=text),
+                      Document(id='chunk12', text=text),
+                      Document(id='chunk13', text=text)
+                      ]
+    docs[0].chunks[0].chunks = [
                     Document(id='chunk111', text=text),
                     Document(id='chunk112', text=text),
                 ]
-            ),
-            Document(id='chunk12', text=text),
-            Document(id='chunk13', text=text),
-        ]
-    )]
-
 
     f = Flow().add(uses={
         'jtype': ClipTextEncoder.__name__,
@@ -79,8 +61,14 @@ def test_traversal_path():
         }
     })
     with f:
-        f.post(on='/test', inputs=docs, on_done=validate_default_traversal)
-        f.post(on='/test', inputs=docs, parameters={'traversal_path': ['cc']}, on_done=validate_request_traversal)
+        result = f.post(on='/test', inputs=docs, return_results=True)
+        for path, count in [['r', 0], ['c', 3], ['cc', 0]]:
+            print(path)
+            assert len(DocumentArray(result[0].data.docs).traverse_flat([path]).get_attributes('embedding')) == count
+
+        result = f.post(on='/test', inputs=docs, parameters={'traversal_path': ['cc']}, return_results=True)
+        for path, count in [['r', 0], ['c', 0], ['cc', 2]]:
+            assert len(DocumentArray(result[0].data.docs).traverse_flat([path]).get_attributes('embedding')) == count
 
 
 def test_no_documents():
@@ -131,3 +119,15 @@ def test_clip_data():
             expected_embedding = model.encode_text(tokens).detach().numpy().flatten()
 
         np.testing.assert_almost_equal(actual_embedding, expected_embedding, 5)
+
+text = 'blah'
+docs = [Document(
+    id='root1',
+    text=text,
+        ),
+        Document(id='chunk12', text=text),
+        Document(id='chunk13', text=text),
+    ]
+docs[0].chunks = [Document(id='chunk11', text=text,)]
+docs[0].chunks[0].chunks = [Document(id='chunk111', text=text),Document(id='chunk112', text=text),]
+docs[0].plot()
