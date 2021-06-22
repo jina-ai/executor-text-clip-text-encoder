@@ -54,16 +54,3 @@ class ClipTextEncoder(Executor):
                 numpy_embedding_batch = embedding_batch.cpu().numpy()
                 for document, numpy_embedding in zip(document_batch, numpy_embedding_batch):
                     document.embedding = numpy_embedding
-
-
-        # if not docs:
-        #     return
-        # traversal_path = parameters.get('traversal_path', self.default_traversal_path)
-        # flattened_docs = docs.traverse_flat(traversal_path)
-        # if flattened_docs:
-        #     with torch.no_grad():
-        #         for doc in flattened_docs:
-        #             input_torch_tensor = clip.tokenize(doc.content)
-        #             embed = self.model.encode_text(input_torch_tensor)
-        #             doc.embedding = embed.cpu().numpy().flatten()
-        #     return docs
