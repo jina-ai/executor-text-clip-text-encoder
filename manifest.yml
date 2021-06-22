@@ -1,12 +1,8 @@
 manifest_version: 1
-name: ClipTextEncoder
-kind: encoder
-type: pod
-description: '`ClipTextEncoder` encodes text with CLIP model'
+name: CLIPTextEncoder
+alias: ClipTextEncoder
+description: Encoder based on the Clip model proposed in https://cdn.openai.com/papers/Learning_Transferable_Visual_Models_From_Natural_Language_Supervision.pdf
 author: Jina AI Dev-Team (dev-team@jina.ai)
 url: https://jina.ai
-vendor: Jina AI Limited
-documentation: https://github.com/jina-ai/jina-hub
-version: 0.0.1
-license: apache-2.0
-keywords: [text, nlp, crossmodal, PyTorch, encoder, Clip, en]
+avatar: https://avatars.githubusercontent.com/u/60539444?s=200&v=4
+keywords: [clip, text, crossmodal, encoder, PyTorch, en]

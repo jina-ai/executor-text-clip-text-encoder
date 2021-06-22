@@ -1,4 +1,4 @@
-from jina import Document, DocumentArray, Executor, requests
+from jina import DocumentArray, Executor, requests
 import torch
 import clip
 from typing import Iterable, Optional, List
@@ -7,6 +7,7 @@ from typing import Iterable, Optional, List
 def _batch_generator(data: DocumentArray, batch_size: int):
     for i in range(0, len(data), batch_size):
         yield data[i: i + batch_size]
+
 
 class ClipTextEncoder(Executor):
     """Encode text into embeddings."""
@@ -29,7 +30,6 @@ class ClipTextEncoder(Executor):
         if docs:
             document_batches_generator = self._get_input_data(docs, parameters)
             self._create_embeddings(document_batches_generator)
-
 
     def _get_input_data(self, docs: DocumentArray, parameters: dict):
         traversal_paths = parameters.get('default_traversal_paths', self.default_traversal_paths)

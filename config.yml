@@ -1,4 +1,4 @@
 jtype: ClipTextEncoder
 metas:
   py_modules:
-    - jinahub.encoder.ClipTextEncoder
+    - clip_text.py
