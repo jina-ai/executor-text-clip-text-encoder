@@ -25,52 +25,11 @@ def test_fail():
 
 
 def test_clip_batch():
-    f = Flow().add(uses={
-        'jtype': ClipTextEncoder.__name__,
-        'with': {
-            'default_batch_size': 10,
-            'model_name': 'ViT-B/32'
-        }
-    })
-    with f:
-        result = f.post(on='/test', inputs=(Document(text='random text') for _ in range(30)),
-               return_results=True)
-        assert 30 == len(result[0].docs.get_attributes('embedding'))
-
-
-def test_traversal_path():
-    text = 'blah'
-    docs = [Document(id='root1', text=text)]
-    docs[0].chunks = [Document(id='chunk11', text=text),
-                      Document(id='chunk12', text=text),
-                      Document(id='chunk13', text=text)
-                      ]
-    docs[0].chunks[0].chunks = [
-                    Document(id='chunk111', text=text),
-                    Document(id='chunk112', text=text),
-                ]
-
-    f = Flow().add(uses={
-        'jtype': ClipTextEncoder.__name__,
-        'with': {
-            'default_traversal_paths': ['c'],
-            'model_name': 'ViT-B/32',
-        }
-    })
-    with f:
-        result = f.post(on='/test', inputs=docs, return_results=True)
-        for path, count in [['r', 0], ['c', 3], ['cc', 0]]:
-            assert len(DocumentArray(result[0].data.docs).traverse_flat([path]).get_attributes('embedding')) == count
-
-        result = f.post(on='/test', inputs=docs, parameters={'traversal_paths': ['cc']}, return_results=True)
-        for path, count in [['r', 0], ['c', 0], ['cc', 2]]:
-            assert len(DocumentArray(result[0].data.docs).traverse_flat([path]).get_attributes('embedding')) == count
-
-
-def test_no_documents():
-    with Flow().add(uses=ClipTextEncoder) as f:
-        result = f.post(on='/test', inputs=[], return_results=True)
-        assert result[0].status.code == 0  # SUCCESS
+    test_docs = DocumentArray((Document(text='random text') for _ in range(30)))
+    clip_text_encoder = ClipTextEncoder()
+    parameters = {'default_batch_size': 10, 'model_name': 'ViT-B/32'}
+    clip_text_encoder.encode(test_docs, parameters)
+    assert 30 == len(test_docs.get_attributes('embedding'))
 
 
 def test_clip_data():
@@ -84,11 +43,15 @@ def test_clip_data():
     for sentence in sentences:
         docs.append(Document(text=sentence))
 
-    with Flow().add(uses=ClipTextEncoder) as f:
-        results = f.post(on='/test', inputs=docs, return_results=True)
-        txt_to_ndarray = {}
-        for d in results[0].docs:
-            txt_to_ndarray[d.text] = d.embedding
+    # with Flow().add(uses=ClipTextEncoder) as f:
+    #     results = f.post(on='/test', inputs=docs, return_results=True)
+
+    clip_text_encoder = ClipTextEncoder()
+    clip_text_encoder.encode(DocumentArray(docs), {})
+
+    txt_to_ndarray = {}
+    for d in docs:
+        txt_to_ndarray[d.text] = d.embedding
 
     def dist(a, b):
         nonlocal txt_to_ndarray

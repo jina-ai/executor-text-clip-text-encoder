@@ -1,7 +1,7 @@
 from jina import Document, DocumentArray, Executor, requests
 import torch
 import clip
-from typing import Iterable, Optional
+from typing import Iterable, Optional, List
 
 
 def _batch_generator(data: DocumentArray, batch_size: int):
@@ -14,8 +14,8 @@ class ClipTextEncoder(Executor):
     def __init__(self,
                  model_name: str = 'ViT-B/32',
                  default_batch_size: int = 32,
-                 default_traversal_paths: str = 'r',
-                 default_device: str = 'cpu',
+                 default_traversal_paths: List[str] = ['r'],
+                 default_device: Optional[str] = 'cpu',
                  jit: bool = True,
                  *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -32,8 +32,8 @@ class ClipTextEncoder(Executor):
 
 
     def _get_input_data(self, docs: DocumentArray, parameters: dict):
-        traversal_paths = parameters.get('traversal_paths', self.default_traversal_paths)
-        batch_size = parameters.get('batch_size', self.default_batch_size)
+        traversal_paths = parameters.get('default_traversal_paths', self.default_traversal_paths)
+        batch_size = parameters.get('default_batch_size', self.default_batch_size)
 
         # traverse through all documents which have to be processed
         flat_docs = docs.traverse_flat(traversal_paths)
