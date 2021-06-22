@@ -1,12 +1,9 @@
-import os
 import clip
 import numpy as np
 import torch
 from jina import Flow, Document, DocumentArray, requests, Executor
 
 from jinahub.encoder.clip_text import ClipTextEncoder
-
-cur_dir = os.path.dirname(os.path.abspath(__file__))
 
 
 def test_fail():
@@ -38,9 +35,6 @@ def test_clip_data():
     for sentence in sentences:
         docs.append(Document(text=sentence))
 
-    # with Flow().add(uses=ClipTextEncoder) as f:
-    #     results = f.post(on='/test', inputs=docs, return_results=True)
-
     clip_text_encoder = ClipTextEncoder()
     clip_text_encoder.encode(DocumentArray(docs), {})
 
@@ -62,7 +56,8 @@ def test_clip_data():
     assert small_distance < dist('banana2', 'airplane')
     small_distance = dist('Jina AI is lit', 'Jina AI is great')
     assert small_distance < dist('Jina AI is a cloud-native neural search company', 'Jina AI is a github repo')
-    assert small_distance < dist('Jina AI is a cloud-native neural search company', 'Jina AI is an open source neural search project')
+    assert small_distance < dist('Jina AI is a cloud-native neural search company',
+                                 'Jina AI is an open source neural search project')
 
     # assert same results like calculating it manually
     model, preprocess = clip.load('ViT-B/32', device='cpu')

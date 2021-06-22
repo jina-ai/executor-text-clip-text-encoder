@@ -1,10 +1,6 @@
 from jina import Document, DocumentArray, Flow
-#from jinahub.encoder.ClipTextEncoder import ClipTextEncoder
-import sys
+from jinahub.encoder.clip_text import ClipTextEncoder
 
-sys.path.insert(1, '../..')
-
-from encode import ClipTextEncoder
 
 def test_traversal_path():
     text = 'blah'
@@ -14,9 +10,9 @@ def test_traversal_path():
                       Document(id='chunk13', text=text)
                       ]
     docs[0].chunks[0].chunks = [
-                    Document(id='chunk111', text=text),
-                    Document(id='chunk112', text=text),
-                ]
+        Document(id='chunk111', text=text),
+        Document(id='chunk112', text=text),
+    ]
 
     f = Flow().add(uses={
         'jtype': ClipTextEncoder.__name__,
@@ -33,6 +29,7 @@ def test_traversal_path():
         result = f.post(on='/test', inputs=docs, parameters={'default_traversal_paths': ['cc']}, return_results=True)
         for path, count in [['r', 0], ['c', 0], ['cc', 2]]:
             assert len(DocumentArray(result[0].data.docs).traverse_flat([path]).get_attributes('embedding')) == count
+
 
 def test_no_documents():
     with Flow().add(uses=ClipTextEncoder) as f:
