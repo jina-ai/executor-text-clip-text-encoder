@@ -1,7 +1,7 @@
 from jina import Document, DocumentArray, Executor, requests
 import torch
 import clip
-from typing import Iterable
+from typing import Iterable, Optional
 
 
 def _batch_generator(data: DocumentArray, batch_size: int):
@@ -25,7 +25,7 @@ class ClipTextEncoder(Executor):
         self.default_batch_size = default_batch_size
 
     @requests
-    def encode(self, docs: DocumentArray, parameters: dict, **kwargs):
+    def encode(self, docs: Optional[DocumentArray], parameters: dict, **kwargs):
         if docs:
             document_batches_generator = self._get_input_data(docs, parameters)
             self._create_embeddings(document_batches_generator)
@@ -49,7 +49,6 @@ class ClipTextEncoder(Executor):
                 text_batch = [d.text for d in document_batch]
                 tensor = clip.tokenize(text_batch)
                 tensor = tensor.to(self.device)
-                print(f'model type {type(self.model)}')
                 embedding_batch = self.model.encode_text(tensor)
                 numpy_embedding_batch = embedding_batch.cpu().numpy()
                 for document, numpy_embedding in zip(document_batch, numpy_embedding_batch):
