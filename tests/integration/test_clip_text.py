@@ -4,12 +4,8 @@ import clip
 import numpy as np
 import torch
 from jina import Flow, Document, DocumentArray, requests, Executor
-#from jinahub.encoder.ClipTextEncoder import ClipTextEncoder
-import sys
 
-sys.path.insert(1, '../..')
-
-from encode import ClipTextEncoder
+from clip_text import ClipTextEncoder
 
 cur_dir = os.path.dirname(os.path.abspath(__file__))
 
