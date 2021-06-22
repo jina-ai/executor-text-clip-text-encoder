@@ -68,12 +68,3 @@ def test_clip_data():
             expected_embedding = model.encode_text(tokens).detach().numpy().flatten()
 
         np.testing.assert_almost_equal(actual_embedding, expected_embedding, 5)
-
-
-def test_encode():
-    encoder = ClipTextEncoder()
-    docs = DocumentArray([
-        Document(text=t) for t in ('hello', 'jina')])
-    encoder.encode(docs=docs, parameters={})
-    for d in docs:
-        print(f'{d.embedding.shape}')
