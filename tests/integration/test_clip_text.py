@@ -1,11 +1,8 @@
-import operator
 import os
-from glob import glob
 
 import clip
 import numpy as np
 import torch
-from PIL import Image
 from jina import Flow, Document, DocumentArray, requests, Executor
 #from jinahub.encoder.ClipTextEncoder import ClipTextEncoder
 import sys
@@ -31,8 +28,7 @@ def test_clip_text_encoder():
     f = Flow().add(uses={
         'jtype': ClipTextEncoder.__name__,
         'with': {
-            'model_name': 'ViT-B/32',
-            'device': 'cpu'
+            'model_name': 'ViT-B/32'
         }
     })
     with f:
@@ -63,7 +59,6 @@ def test_traversal_path():
     with f:
         result = f.post(on='/test', inputs=docs, return_results=True)
         for path, count in [['r', 0], ['c', 3], ['cc', 0]]:
-            print(path)
             assert len(DocumentArray(result[0].data.docs).traverse_flat([path]).get_attributes('embedding')) == count
 
         result = f.post(on='/test', inputs=docs, parameters={'traversal_path': ['cc']}, return_results=True)
@@ -119,15 +114,3 @@ def test_clip_data():
             expected_embedding = model.encode_text(tokens).detach().numpy().flatten()
 
         np.testing.assert_almost_equal(actual_embedding, expected_embedding, 5)
-
-text = 'blah'
-docs = [Document(
-    id='root1',
-    text=text,
-        ),
-        Document(id='chunk12', text=text),
-        Document(id='chunk13', text=text),
-    ]
-docs[0].chunks = [Document(id='chunk11', text=text,)]
-docs[0].chunks[0].chunks = [Document(id='chunk111', text=text),Document(id='chunk112', text=text),]
-docs[0].plot()

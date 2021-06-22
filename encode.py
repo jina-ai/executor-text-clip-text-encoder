@@ -15,7 +15,8 @@ class ClipTextEncoder(Executor):
 
     @requests
     def encode(self, docs: DocumentArray, parameters: dict, **kwargs):
-        assert(len(docs)==1)
+        if not docs:
+            return
         traversal_path = parameters.get('traversal_path', self.default_traversal_path)
         flattened_docs = docs.traverse_flat(traversal_path)
         if flattened_docs:
@@ -24,5 +25,4 @@ class ClipTextEncoder(Executor):
                     input_torch_tensor = clip.tokenize(doc.content)
                     embed = self.model.encode_text(input_torch_tensor)
                     doc.embedding = embed.cpu().numpy().flatten()
-            # assert(len(DocumentArray(docs).traverse_flat(['c']).get_attributes('embedding')) == 3)
             return docs
