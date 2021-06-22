@@ -3,7 +3,7 @@ import numpy as np
 import torch
 from jina import Flow, Document, DocumentArray, requests, Executor
 
-from jinahub.encoder.clip_text import ClipTextEncoder
+from jinahub.encoder.clip_text import CLIPTextEncoder
 
 
 def test_fail():
@@ -18,7 +18,7 @@ def test_fail():
 
 def test_clip_batch():
     test_docs = DocumentArray((Document(text='random text') for _ in range(30)))
-    clip_text_encoder = ClipTextEncoder()
+    clip_text_encoder = CLIPTextEncoder()
     parameters = {'default_batch_size': 10, 'model_name': 'ViT-B/32'}
     clip_text_encoder.encode(test_docs, parameters)
     assert 30 == len(test_docs.get_attributes('embedding'))
@@ -35,7 +35,7 @@ def test_clip_data():
     for sentence in sentences:
         docs.append(Document(text=sentence))
 
-    clip_text_encoder = ClipTextEncoder()
+    clip_text_encoder = CLIPTextEncoder()
     clip_text_encoder.encode(DocumentArray(docs), {})
 
     txt_to_ndarray = {}

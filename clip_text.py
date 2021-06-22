@@ -9,7 +9,7 @@ def _batch_generator(data: DocumentArray, batch_size: int):
         yield data[i: i + batch_size]
 
 
-class ClipTextEncoder(Executor):
+class CLIPTextEncoder(Executor):
     """Encode text into embeddings."""
 
     def __init__(self,

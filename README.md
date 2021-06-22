@@ -2,13 +2,13 @@
 <img src="https://github.com/jina-ai/jina/blob/master/.github/logo-only.gif?raw=true" alt="Jina banner" width="200px">
 </p>
 
-# ClipTextEncoder
+# CLIPTextEncoder
 
- **ClipTextEncoder** is a class that wraps the text embedding functionality from the **CLIP** model.
+ **CLIPTextEncoder** is a class that wraps the text embedding functionality from the **CLIP** model.
 
 The **CLIP** model was originally proposed in  [Learning Transferable Visual Models From Natural Language Supervision](https://cdn.openai.com/papers/Learning_Transferable_Visual_Models_From_Natural_Language_Supervision.pdf).
 
-`ClipTextEncoder` encodes data from a `np.ndarray` of strings and returns a `np.ndarray` of floating point values.
+`CLIPTextEncoder` encodes data from a `np.ndarray` of strings and returns a `np.ndarray` of floating point values.
 
 - Input shape: `BatchSize `
 
@@ -27,7 +27,7 @@ The following example shows how to generate output embeddings given an input `np
 text_batch = np.array(['Han likes eating pizza', 'Han likes pizza', 'Jina rocks'])
 
 # Encoder embedding 
-encoder = ClipTextEncoder()
+encoder = CLIPTextEncoder()
 embeddeding_batch_np = encoder.encode(text_batch)
 
 
@@ -41,7 +41,7 @@ Use the prebuilt images from JinaHub in your python codes,
 from jina import Flow
 	
 f = Flow().add(
-        uses='jinahub+docker://ClipTextEncoder:v1',
+        uses='jinahub+docker://CLIPTextEncoder',
         volumes='/your_home_folder/.cache/clip:/root/.cache/clip')
 ```
 
@@ -51,7 +51,7 @@ or in the `.yml` config.
 jtype: Flow
 pods:
   - name: encoder
-    uses: 'jinahub+docker://ClipTextEncoder:v1'
+    uses: 'jinahub+docker://CLIPTextEncoder'
     volumes: '/your_home_folder/.cache/clip:/root/.cache/clip'
 ```
 
@@ -67,10 +67,10 @@ pods:
 1. Use `jinahub-text-clip-text-encoder` in your code
 
 	```python
-	from jinahub.encoder.ClipTextEncoder import ClipTextEncoder
+	from jinahub.encoder.clip_text import CLIPTextEncoder
 	from jina import Flow
 	
-	f = Flow().add(uses=ClipTextEncoder)
+	f = Flow().add(uses=CLIPTextEncoder)
 	```
 
 
@@ -104,7 +104,7 @@ from jina import Flow, Document
 import numpy as np
 	
 f = Flow().add(
-        uses='jinahub+docker://ClipTextEncoder:v1',
+        uses='jinahub+docker://CLIPTextEncoder',
         volumes='/your_home_folder/.cache/clip:/root/.cache/clip')
 	
 def check_emb(resp):

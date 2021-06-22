@@ -1,5 +1,5 @@
 from jina import Document, DocumentArray, Flow
-from jinahub.encoder.clip_text import ClipTextEncoder
+from jinahub.encoder.clip_text import CLIPTextEncoder
 
 
 def test_traversal_path():
@@ -15,7 +15,7 @@ def test_traversal_path():
     ]
 
     f = Flow().add(uses={
-        'jtype': ClipTextEncoder.__name__,
+        'jtype': CLIPTextEncoder.__name__,
         'with': {
             'default_traversal_paths': ['c'],
             'model_name': 'ViT-B/32',
@@ -32,6 +32,6 @@ def test_traversal_path():
 
 
 def test_no_documents():
-    with Flow().add(uses=ClipTextEncoder) as f:
+    with Flow().add(uses=CLIPTextEncoder) as f:
         result = f.post(on='/test', inputs=[], return_results=True)
         assert result[0].status.code == 0  # SUCCESS
