@@ -24,10 +24,11 @@ def test_fail():
         f.post(on='/test', inputs=[Document(text='whatever')])
 
 
-def test_clip_text_encoder():
+def test_clip_batch():
     f = Flow().add(uses={
         'jtype': ClipTextEncoder.__name__,
         'with': {
+            'default_batch_size': 10,
             'model_name': 'ViT-B/32'
         }
     })
@@ -52,7 +53,7 @@ def test_traversal_path():
     f = Flow().add(uses={
         'jtype': ClipTextEncoder.__name__,
         'with': {
-            'default_traversal_path': ['c'],
+            'default_traversal_paths': ['c'],
             'model_name': 'ViT-B/32',
         }
     })
@@ -61,7 +62,7 @@ def test_traversal_path():
         for path, count in [['r', 0], ['c', 3], ['cc', 0]]:
             assert len(DocumentArray(result[0].data.docs).traverse_flat([path]).get_attributes('embedding')) == count
 
-        result = f.post(on='/test', inputs=docs, parameters={'traversal_path': ['cc']}, return_results=True)
+        result = f.post(on='/test', inputs=docs, parameters={'traversal_paths': ['cc']}, return_results=True)
         for path, count in [['r', 0], ['c', 0], ['cc', 2]]:
             assert len(DocumentArray(result[0].data.docs).traverse_flat([path]).get_attributes('embedding')) == count
 
