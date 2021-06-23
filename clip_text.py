@@ -30,9 +30,10 @@ class CLIPTextEncoder(Executor):
         """
         Encode all docs with text and store the encodings in the embedding attribute of the docs.
         :param docs: documents sent to the encoder. The docs must have text.
-        :param parameters: dictionary to define the `traversal_paths` and the `batch_size`. For example,
-            `parameters={'default_traversal_paths': 'r', 'default_batch_size': 10}` will override the `self.default_traversal_paths` and
-            `self.default_batch_size`.
+        :param parameters: dictionary to define `model_name`, `traversal_paths`, `default_device`, and `batch_size`.
+            For example,
+            `parameters={'model_name': 'ViT-B/16', 'default_traversal_paths': 'r', 'default_device': 'gpu', 'default_batch_size': 10}`
+            will override the `self.model`, `self.default_traversal_paths`, `self.device` and `self.default_batch_size`.
         """
         if docs:
             document_batches_generator = self._get_input_data(docs, parameters)
