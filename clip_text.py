@@ -21,12 +21,19 @@ class CLIPTextEncoder(Executor):
                  *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.device = default_device
-        self.model, _ = clip.load(model_name, 'cpu', jit)
+        self.model, _ = clip.load(model_name, self.device, jit)
         self.default_traversal_paths = default_traversal_paths
         self.default_batch_size = default_batch_size
 
     @requests
     def encode(self, docs: Optional[DocumentArray], parameters: dict, **kwargs):
+        """
+        Encode all docs with text and store the encodings in the embedding attribute of the docs.
+        :param docs: documents sent to the encoder. The docs must have text.
+        :param parameters: dictionary to define the `traversal_paths` and the `batch_size`. For example,
+            `parameters={'default_traversal_paths': 'r', 'default_batch_size': 10}` will override the `self.default_traversal_paths` and
+            `self.default_batch_size`.
+        """
         if docs:
             document_batches_generator = self._get_input_data(docs, parameters)
             self._create_embeddings(document_batches_generator)
