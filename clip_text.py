@@ -20,7 +20,7 @@ class CLIPTextEncoder(Executor):
                  jit: bool = True,
                  *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.device = default_device
+        self.device = default_device or 'cpu'
         self.model, _ = clip.load(model_name, self.device, jit)
         self.default_traversal_paths = default_traversal_paths
         self.default_batch_size = default_batch_size
