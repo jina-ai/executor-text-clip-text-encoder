@@ -30,25 +30,23 @@ class CLIPTextEncoder(Executor):
         """
         Encode all docs with text and store the encodings in the embedding attribute of the docs.
         :param docs: documents sent to the encoder. The docs must have text.
-        :param parameters: dictionary to define `model_name`, `traversal_paths`, `default_device`, and `batch_size`.
+        :param parameters: dictionary to define the `traversal_path` and the `batch_size`.
             For example,
-            `parameters={'model_name': 'ViT-B/16', 'default_traversal_paths': 'r', 'default_device': 'gpu', 'default_batch_size': 10}`
-            will override the `self.model`, `self.default_traversal_paths`, `self.device` and `self.default_batch_size`.
+            `parameters={'traversal_paths': ['r'], 'batch_size': 10}`
+            will set the parameters for traversal_paths, batch_size and that are actually used
         """
         if docs:
             document_batches_generator = self._get_input_data(docs, parameters)
             self._create_embeddings(document_batches_generator)
 
     def _get_input_data(self, docs: DocumentArray, parameters: dict):
-        traversal_paths = parameters.get('default_traversal_paths', self.default_traversal_paths)
-        batch_size = parameters.get('default_batch_size', self.default_batch_size)
-
         # traverse through all documents which have to be processed
+        traversal_paths = parameters.get('traversal_paths', self.default_traversal_paths)
+        batch_size = parameters.get('batch_size', self.default_batch_size)
         flat_docs = docs.traverse_flat(traversal_paths)
 
         # filter out documents without text
         filtered_docs = [doc for doc in flat_docs if doc.text is not None]
-
         return _batch_generator(filtered_docs, batch_size)
 
     def _create_embeddings(self, document_batches_generator: Iterable):

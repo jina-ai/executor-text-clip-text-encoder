@@ -1,5 +1,15 @@
-from jina import Document, DocumentArray, Flow
+from jina import Document, DocumentArray, Flow, requests, Executor
 from jinahub.encoder.clip_text import CLIPTextEncoder
+
+
+def test_fail():
+    class MockExecutor(Executor):
+        @requests
+        def encode(self, **kwargs):
+            pass
+
+    with Flow().add(uses=MockExecutor) as f:
+        f.post(on='/test', inputs=[Document(text='whatever')])
 
 
 def test_traversal_path():
@@ -26,7 +36,7 @@ def test_traversal_path():
         for path, count in [['r', 0], ['c', 3], ['cc', 0]]:
             assert len(DocumentArray(result[0].data.docs).traverse_flat([path]).get_attributes('embedding')) == count
 
-        result = f.post(on='/test', inputs=docs, parameters={'default_traversal_paths': ['cc']}, return_results=True)
+        result = f.post(on='/test', inputs=docs, parameters={'traversal_paths': ['cc']}, return_results=True)
         for path, count in [['r', 0], ['c', 0], ['cc', 2]]:
             assert len(DocumentArray(result[0].data.docs).traverse_flat([path]).get_attributes('embedding')) == count
 

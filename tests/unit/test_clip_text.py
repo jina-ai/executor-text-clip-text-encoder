@@ -1,25 +1,19 @@
 import clip
 import numpy as np
 import torch
-from jina import Flow, Document, DocumentArray, requests, Executor
-
+from jina import Document, DocumentArray
 from jinahub.encoder.clip_text import CLIPTextEncoder
 
-
-def test_fail():
-    class MockExecutor(Executor):
-        @requests
-        def encode(self, **kwargs):
-            pass
-
-    with Flow().add(uses=MockExecutor) as f:
-        f.post(on='/test', inputs=[Document(text='whatever')])
-
+def test_no_documents():
+    clip_text_encoder = CLIPTextEncoder()
+    test_docs = DocumentArray()
+    clip_text_encoder.encode(test_docs)
+    assert len(test_docs) == 0  # SUCCESS
 
 def test_clip_batch():
     test_docs = DocumentArray((Document(text='random text') for _ in range(30)))
     clip_text_encoder = CLIPTextEncoder()
-    parameters = {'default_batch_size': 10, 'model_name': 'ViT-B/32'}
+    parameters = {'batch_size': 10}
     clip_text_encoder.encode(test_docs, parameters)
     assert 30 == len(test_docs.get_attributes('embedding'))
 
