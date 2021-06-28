@@ -123,11 +123,11 @@ with f:
 
 ### Inputs 
 
-[Documents](https://github.com/jina-ai/jina/blob/master/.github/2.0/cookbooks/Document.md) with text
+[Documents](https://github.com/jina-ai/jina/blob/master/.github/2.0/cookbooks/Document.md) with the [`text`](https://github.com/jina-ai/jina/blob/master/.github/2.0/cookbooks/Document.md#document-attributes) attribute.
 
 ### Returns
 
-[Documents](https://github.com/jina-ai/jina/blob/master/.github/2.0/cookbooks/Document.md) with `embedding` fields filled with an `ndarray` of the shape `512` with `dtype=float32`.
+[Documents](https://github.com/jina-ai/jina/blob/master/.github/2.0/cookbooks/Document.md) with the `embedding` attribute filled with an `ndarray` of the shape `512` with `dtype=float32`.
 
 
 
