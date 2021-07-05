@@ -4,11 +4,13 @@ import torch
 from jina import Document, DocumentArray
 from jinahub.encoder.clip_text import CLIPTextEncoder
 
+
 def test_no_documents():
     clip_text_encoder = CLIPTextEncoder()
     test_docs = DocumentArray()
     clip_text_encoder.encode(test_docs)
     assert len(test_docs) == 0  # SUCCESS
+
 
 def test_clip_batch():
     test_docs = DocumentArray((Document(text='random text') for _ in range(30)))

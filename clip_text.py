@@ -2,11 +2,7 @@ from jina import DocumentArray, Executor, requests
 import torch
 import clip
 from typing import Iterable, Optional, List
-
-
-def _batch_generator(data: DocumentArray, batch_size: int):
-    for i in range(0, len(data), batch_size):
-        yield data[i: i + batch_size]
+from jina_commons.batching import get_docs_batch_generator
 
 
 class CLIPTextEncoder(Executor):
@@ -15,14 +11,14 @@ class CLIPTextEncoder(Executor):
     def __init__(self,
                  model_name: str = 'ViT-B/32',
                  default_batch_size: int = 32,
-                 default_traversal_paths: List[str] = ['r'],
+                 default_traversal_paths: Optional[List[str]] = None,
                  default_device: Optional[str] = 'cpu',
                  jit: bool = True,
                  *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.device = default_device or 'cpu'
         self.model, _ = clip.load(model_name, self.device, jit)
-        self.default_traversal_paths = default_traversal_paths
+        self.default_traversal_paths = default_traversal_paths or ['r']
         self.default_batch_size = default_batch_size
 
     @requests
@@ -36,18 +32,13 @@ class CLIPTextEncoder(Executor):
             will set the parameters for traversal_paths, batch_size and that are actually used
         """
         if docs:
-            document_batches_generator = self._get_input_data(docs, parameters)
+            document_batches_generator = get_docs_batch_generator(
+                docs,
+                traversal_path=parameters.get('traversal_paths', self.default_traversal_paths),
+                batch_size=parameters.get('batch_size', self.default_batch_size),
+                needs_attr='text',
+            )
             self._create_embeddings(document_batches_generator)
-
-    def _get_input_data(self, docs: DocumentArray, parameters: dict):
-        # traverse through all documents which have to be processed
-        traversal_paths = parameters.get('traversal_paths', self.default_traversal_paths)
-        batch_size = parameters.get('batch_size', self.default_batch_size)
-        flat_docs = docs.traverse_flat(traversal_paths)
-
-        # filter out documents without text
-        filtered_docs = [doc for doc in flat_docs if doc.text is not None]
-        return _batch_generator(filtered_docs, batch_size)
 
     def _create_embeddings(self, document_batches_generator: Iterable):
         with torch.no_grad():
