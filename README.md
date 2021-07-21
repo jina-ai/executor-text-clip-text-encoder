@@ -1,12 +1,8 @@
-<p align="center">
-<img src="https://github.com/jina-ai/jina/blob/master/.github/logo-only.gif?raw=true" alt="Jina banner" width="200px">
-</p>
-
-# CLIPTextEncoder
+# ✨ CLIPTextEncoder
 
  **CLIPTextEncoder** is a class that wraps the text embedding functionality from the **CLIP** model.
 
-The **CLIP** model was originally proposed in  [Learning Transferable Visual Models From Natural Language Supervision](https://cdn.openai.com/papers/Learning_Transferable_Visual_Models_From_Natural_Language_Supervision.pdf).
+The **CLIP** model was originally proposed in  [Learning Transferable Visual Models From Natural Language Supervision](https://arxiv.org/abs/2103.00020).
 
 `CLIPTextEncoder` encodes data from a `np.ndarray` of strings and returns a `np.ndarray` of floating point values.
 
@@ -14,34 +10,24 @@ The **CLIP** model was originally proposed in  [Learning Transferable Visual Mod
 
 - Output shape: `BatchSize x EmbeddingDimension`
 
-## Prerequisites
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
 
-To install the dependencies locally run 
-```
-pip install . 
-pip install -r tests/requirements.txt
-```
-To verify the installation works:
-```
-pytest tests
-```
+- [🌱 Prerequisites](#-prerequisites)
+- [🚀 Usages](#-usages)
+- [🎉️ Example](#%EF%B8%8F-example)
+- [🔍️ Reference](#%EF%B8%8F-reference)
 
-## Encode with the encoder:
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-The following example shows how to generate output embeddings given an input `np.ndarray` of strings.
+## 🌱 Prerequisites
 
-```python
-# Input data
-text_batch = np.array(['Han likes eating pizza', 'Han likes pizza', 'Jina rocks'])
+No prerequisites are required to run this executor.
 
-# Encoder embedding 
-encoder = CLIPTextEncoder()
-embeddeding_batch_np = encoder.encode(text_batch)
+## 🚀 Usages
 
-
-## Usages
-
-### Via JinaHub (🚧W.I.P.)
+### 🚚 Via JinaHub (🚧 WIP)
 
 Use the prebuilt images from JinaHub in your python codes, 
 
@@ -50,7 +36,8 @@ from jina import Flow
 	
 f = Flow().add(
         uses='jinahub+docker://CLIPTextEncoder',
-        volumes='/your_home_folder/.cache/clip:/root/.cache/clip')
+        volumes='/your_home_folder/.cache/clip:/root/.cache/clip'
+	)
 ```
 
 or in the `.yml` config.
@@ -64,7 +51,7 @@ pods:
 ```
 
 
-### Via Pypi
+### 📦️ Via Pypi
 
 1. Install the `jinahub-text-clip-text-encoder`
 
@@ -82,7 +69,7 @@ pods:
 	```
 
 
-### Via Docker
+### 🐳 Via Docker
 
 1. Clone the repo and build the docker image
 
@@ -92,19 +79,20 @@ pods:
 	docker build -t jinahub-clip-text .
 	```
 
-1. Use `jinahub-clip-text` in your codes
+2. Use `jinahub-clip-text` in your code
 
 	```python
 	from jina import Flow
 	
 	f = Flow().add(
 	        uses='docker://jinahub-clip-text:latest',
-	        volumes='/your_home_folder/.cache/clip:/root/.cache/clip')
+	        volumes='/your_home_folder/.cache/clip:/root/.cache/clip'
+		)
 	```
 	
 
 
-## Example 
+## 🎉️ Example 
 
 
 ```python
@@ -113,7 +101,8 @@ import numpy as np
 	
 f = Flow().add(
         uses='jinahub+docker://CLIPTextEncoder',
-        volumes='/your_home_folder/.cache/clip:/root/.cache/clip')
+        volumes='/your_home_folder/.cache/clip:/root/.cache/clip'
+	)
 	
 def check_emb(resp):
     for doc in resp.data.docs:
@@ -124,7 +113,8 @@ with f:
 	f.post(
 	    on='/foo', 
 	    inputs=Document(text='your text'), 
-	    on_done=check_emb)
+	    on_done=check_emb
+	)
 	    
 ```
 
@@ -139,6 +129,8 @@ with f:
 
 
 
-## Reference
-- https://cdn.openai.com/papers/Learning_Transferable_Visual_Models_From_Natural_Language_Supervision.pdf
-- https://github.com/openai/CLIP
+## 🔍️ Reference
+
+- [CLIP blog post](https://openai.com/blog/clip/)
+- [CLIP paper](https://arxiv.org/abs/2103.00020)
+- [CLIP GitHub repository](https://github.com/openai/CLIP)
