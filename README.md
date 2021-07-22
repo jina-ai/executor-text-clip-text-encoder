@@ -27,7 +27,7 @@ No prerequisites are required to run this executor.
 
 ## 🚀 Usages
 
-### 🚚 Via JinaHub (🚧 WIP)
+### 🚚 Via JinaHub
 
 Use the prebuilt images from JinaHub in your python codes, 
 
