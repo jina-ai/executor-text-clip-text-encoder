@@ -35,9 +35,7 @@ class CLIPTextEncoder(Executor):
         self.default_batch_size = default_batch_size
 
     @requests
-    def encode(
-        self, docs: Optional[DocumentArray] = None, parameters: dict = {}, **kwargs
-    ):
+    def encode(self, docs: Optional[DocumentArray], parameters: dict, **kwargs):
         """
         Encode all docs with text and store the encodings in the embedding
         attribute of the docs.
