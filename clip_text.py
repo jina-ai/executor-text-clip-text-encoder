@@ -22,7 +22,7 @@ class CLIPTextEncoder(Executor):
         self,
         model_name: str = 'ViT-B/32',
         default_batch_size: int = 32,
-        default_traversal_paths: Optional[List[str]] = None,
+        default_traversal_paths: List[str] = ['r'],
         default_device: str = 'cpu',
         jit: bool = True,
         *args,
@@ -31,7 +31,7 @@ class CLIPTextEncoder(Executor):
         super().__init__(*args, **kwargs)
         self.device = default_device
         self.model, _ = clip.load(model_name, self.device, jit)
-        self.default_traversal_paths = default_traversal_paths or ['r']
+        self.default_traversal_paths = default_traversal_paths
         self.default_batch_size = default_batch_size
 
     @requests
