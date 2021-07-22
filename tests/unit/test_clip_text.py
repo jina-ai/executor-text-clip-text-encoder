@@ -8,7 +8,7 @@ from jinahub.encoder.clip_text import CLIPTextEncoder
 def test_no_documents():
     clip_text_encoder = CLIPTextEncoder()
     test_docs = DocumentArray()
-    clip_text_encoder.encode(test_docs)
+    clip_text_encoder.encode(test_docs, {})
     assert len(test_docs) == 0  # SUCCESS
 
 
