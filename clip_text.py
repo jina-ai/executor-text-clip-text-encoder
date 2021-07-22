@@ -39,12 +39,12 @@ class CLIPTextEncoder(Executor):
         self, docs: Optional[DocumentArray] = None, parameters: dict = {}, **kwargs
     ):
         """
-        Encode all docs with text and store the encodings in the embedding 
+        Encode all docs with text and store the encodings in the embedding
         attribute of the docs.
 
         :param docs: documents sent to the encoder. The docs must have text.
-        :param parameters: dictionary to define the ``traversal_path`` and the 
-            ``batch_size``. For example, 
+        :param parameters: dictionary to define the ``traversal_path`` and the
+            ``batch_size``. For example,
             ``parameters={'traversal_paths': ['r'], 'batch_size': 10}``
         """
         if docs:
