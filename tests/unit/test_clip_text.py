@@ -8,7 +8,7 @@ from jinahub.encoder.clip_text import CLIPTextEncoder
 def test_no_documents():
     clip_text_encoder = CLIPTextEncoder()
     test_docs = DocumentArray()
-    clip_text_encoder.encode(test_docs)
+    clip_text_encoder.encode(test_docs, parameters={})
     assert len(test_docs) == 0  # SUCCESS
 
 
@@ -26,8 +26,13 @@ def test_clip_data():
     for word in words:
         docs.append(Document(text=word))
 
-    sentences = ['Jina AI is lit', 'Jina AI is great', 'Jina AI is a cloud-native neural search company', \
-                 'Jina AI is a github repo', 'Jina AI is an open source neural search project']
+    sentences = [
+        'Jina AI is lit',
+        'Jina AI is great',
+        'Jina AI is a cloud-native neural search company',
+        'Jina AI is a github repo',
+        'Jina AI is an open source neural search project',
+    ]
     for sentence in sentences:
         docs.append(Document(text=sentence))
 
@@ -51,9 +56,13 @@ def test_clip_data():
     assert small_distance < dist('banana1', 'studio')
     assert small_distance < dist('banana2', 'airplane')
     small_distance = dist('Jina AI is lit', 'Jina AI is great')
-    assert small_distance < dist('Jina AI is a cloud-native neural search company', 'Jina AI is a github repo')
-    assert small_distance < dist('Jina AI is a cloud-native neural search company',
-                                 'Jina AI is an open source neural search project')
+    assert small_distance < dist(
+        'Jina AI is a cloud-native neural search company', 'Jina AI is a github repo'
+    )
+    assert small_distance < dist(
+        'Jina AI is a cloud-native neural search company',
+        'Jina AI is an open source neural search project',
+    )
 
     # assert same results like calculating it manually
     model, preprocess = clip.load('ViT-B/32', device='cpu')
