@@ -1,5 +1,5 @@
 manifest_version: 1
-name: CLIP Text Encoder
+name: CLIPTextEncoder
 alias: CLIPTextEncoder
 description: Encoder based on the CLIP model
 author: Jina AI Dev-Team (dev-team@jina.ai)
