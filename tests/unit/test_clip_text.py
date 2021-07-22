@@ -71,12 +71,7 @@ def test_traversal_path():
         Document(id='chunk112', text=text),
     ]
 
-    encoder = Executor.load_config('''
-        jtype: CLIPTextEncoder
-        with: 
-           default_traversal_paths: ['c']
-           model_name: ViT-B/32
-        ''')
+    encoder = CLIPTextEncoder(default_traversal_paths=['c'], model_name='ViT-B/32')
 
     original_docs = copy.deepcopy(docs)
     encoder.encode(docs=docs, parameters={}, return_results=True)
