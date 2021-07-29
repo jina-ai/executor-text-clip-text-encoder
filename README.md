@@ -1,3 +1,5 @@
+# MOVED TO https://github.com/jina-ai/executors/tree/main/jinahub/encoders/text/TransformerTorchEncoder
+
 # ✨ CLIPTextEncoder
 
  **CLIPTextEncoder** is a class that wraps the text embedding functionality from the **CLIP** model.
